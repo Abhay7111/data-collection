@@ -11,6 +11,11 @@ const userSchema = new mongoose.Schema({
         required: [true, "password is required"],
         select: false
     },
+    role: {
+        type: String,
+        default: "user",
+        enum: ["admin", "manager", "user"]
+    },
     profile_image: {
         type: String,
         default: "https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3407.jpg"

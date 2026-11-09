@@ -9,6 +9,16 @@ async function APOSPostController(req, res) {
     })
 }
 
+async function APOSGetController(req, res){
+    const data = await APOSModel.find()
+
+    res.status(200).json({
+        message: "data fetched successfully",
+        data: data
+    })
+}
+
 module.exports = {
-    APOSPostController
+    APOSPostController,
+    APOSGetController
 }
