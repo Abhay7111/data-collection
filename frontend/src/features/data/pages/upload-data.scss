@@ -178,6 +178,10 @@
         gap: 12px;
     }
 
+    .portal-header__menu-toggle {
+        display: none;
+    }
+
     .role-badge {
         display: inline-flex;
         align-items: center;
@@ -572,13 +576,74 @@
         }
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 920px) {
         .portal-header {
+            position: relative;
             padding: 10px 16px;
         }
 
+        .portal-header__menu-toggle {
+            width: 42px;
+            height: 42px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            border: 1px solid #ffffff55;
+            border-radius: 8px;
+            background: #ffffff12;
+            color: inherit;
+            cursor: pointer;
+
+            span {
+                width: 19px;
+                height: 2px;
+                border-radius: 2px;
+                background: currentColor;
+            }
+        }
+
         .portal-header__actions {
-            gap: 9px;
+            position: absolute;
+            top: calc(100% + 6px);
+            right: 16px;
+            z-index: 20;
+            min-width: 210px;
+            display: none;
+            align-items: stretch;
+            flex-direction: column;
+            gap: 14px;
+            padding: 16px;
+            border: 1px solid #ffffff35;
+            border-radius: 10px;
+            background: inherit;
+            box-shadow: 0 8px 24px #152b4030;
+        }
+
+        .portal-header__actions--open {
+            display: flex;
+        }
+
+        .portal-header__actions .portal-link {
+            padding: 4px 0;
+            font-size: 13px;
+            text-align: left;
+        }
+
+        .portal-header__actions .portal-link--highlight {
+            padding: 10px 13px;
+            text-align: center;
+        }
+
+        .portal-header__actions .portal-link--button {
+            width: fit-content;
+        }
+
+        .portal-header__actions .online-status,
+        .portal-header__actions .user-presence-badge,
+        .portal-header__actions .role-badge {
+            align-self: flex-start;
         }
 
         .online-status {

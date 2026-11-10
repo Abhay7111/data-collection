@@ -23,7 +23,7 @@ function Register() {
         try {
             const response = await handleRegister(username, password)
             notify(response?.message || 'Your account has been created.', 'success')
-            navigate('/dashboard')
+            navigate('/')
         } catch (error) {
             notify(
                 error?.response?.data?.message || 'Unable to create your account. Please try again.',

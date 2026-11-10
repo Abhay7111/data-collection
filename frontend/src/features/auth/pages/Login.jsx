@@ -23,7 +23,7 @@ function Login() {
         try {
             const response = await handleLogin(username, password)
             notify(response?.message || 'You are now logged in.', 'success')
-            navigate('/dashboard')
+            navigate('/')
         } catch (error) {
             notify(
                 error?.response?.data?.message || 'Unable to log in. Please check your details and try again.',

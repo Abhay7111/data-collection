@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { useNotification } from './notification.context'
 import { useAuth } from '../../auth/hooks/useAuth'
@@ -6,10 +7,12 @@ function PortalHeader() {
     const { user, isOnline, onlineDevices, settings, settingsError, loading, handleLogout } = useAuth()
     const navigate = useNavigate()
     const notify = useNotification()
+    const [menuOpen, setMenuOpen] = useState(false)
 
     const onLogout = async () => {
         try {
             await handleLogout()
+            setMenuOpen(false)
             notify('You have been logged out.', 'success')
             navigate('/login')
         } catch (error) {
@@ -32,7 +35,23 @@ function PortalHeader() {
                     <small>APOS physical verification</small>
                 </span>
             </Link>
-            <div className="portal-header__actions">
+            <button
+                type="button"
+                className="portal-header__menu-toggle"
+                onClick={() => setMenuOpen((isOpen) => !isOpen)}
+                aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                aria-expanded={menuOpen}
+                aria-controls="portal-navigation"
+            >
+                <span />
+                <span />
+                <span />
+            </button>
+            <nav
+                className={`portal-header__actions${menuOpen ? ' portal-header__actions--open' : ''}`}
+                id="portal-navigation"
+                aria-label="Main navigation"
+            >
                 <span className="online-status"><i aria-hidden="true" /> System Online</span>
                 {user ? (
                     <>
@@ -45,19 +64,19 @@ function PortalHeader() {
                             You are {isOnline ? 'online' : 'offline'}
                             {isOnline && onlineDevices > 1 ? ` · ${onlineDevices} devices` : ''}
                         </span>
-                        <Link to="/dashboard" className="portal-link">My profile</Link>
-                        {['admin', 'manager'].includes(user.role) && <Link to="/admin" className="portal-link">Management</Link>}
+                        <Link to="/dashboard" className="portal-link" onClick={() => setMenuOpen(false)}>My profile</Link>
+                        {['admin', 'manager'].includes(user.role) && <Link to="/admin" className="portal-link" onClick={() => setMenuOpen(false)}>Management</Link>}
                         <button className="portal-link portal-link--button" type="button" onClick={onLogout} disabled={loading}>
                             Log out
                         </button>
                     </>
                 ) : (
                     <>
-                        <Link to="/login" className="portal-link">Log in</Link>
-                        <Link to="/register" className="portal-link portal-link--highlight">Register</Link>
+                        <Link to="/login" className="portal-link" onClick={() => setMenuOpen(false)}>Log in</Link>
+                        <Link to="/register" className="portal-link portal-link--highlight" onClick={() => setMenuOpen(false)}>Register</Link>
                     </>
                 )}
-            </div>
+            </nav>
             {settingsError && <span className="portal-settings-error" role="status">{settingsError}</span>}
         </header>
     )
