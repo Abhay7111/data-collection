@@ -27,6 +27,7 @@ function AdminPanel() {
     const [exporting, setExporting] = useState(false)
     const [saving, setSaving] = useState(false)
     const [editingRecord, setEditingRecord] = useState(null)
+    const [adminSettingsOpen, setAdminSettingsOpen] = useState(false)
     const [assigningRecord, setAssigningRecord] = useState('')
     const [updatingUserId, setUpdatingUserId] = useState('')
     const [error, setError] = useState('')
@@ -181,7 +182,7 @@ function AdminPanel() {
 
     return (
         <div className="portal-page workspace-page" data-role={user?.role || 'guest'} style={getRoleThemeStyle(settings, user?.role)}>
-            <PortalHeader />
+            <PortalHeader onAdminSettingsClick={() => setAdminSettingsOpen(true)} />
             <main className="workspace-content">
                 {!authReady ? (
                     <p className="workspace-state">Checking your account…</p>
@@ -249,15 +250,6 @@ function AdminPanel() {
                             onRoleChange={handleRoleChange}
                         />
 
-                        {isAdmin && (
-                            <PortalSettingsEditor
-                                key={JSON.stringify(settings)}
-                                settings={settings}
-                                settingsError={settingsError}
-                                onSave={handleSettingsSave}
-                            />
-                        )}
-
                         <section className="records-card management-records-card">
                             <div className="records-card__heading">
                                 <div>
@@ -294,6 +286,14 @@ function AdminPanel() {
                     onClose={() => setEditingRecord(null)}
                     onSave={handleSave}
                     saving={saving}
+                />
+            )}
+            {isAdmin && adminSettingsOpen && (
+                <AdminSettingsDialog
+                    settings={settings}
+                    settingsError={settingsError}
+                    onSave={handleSettingsSave}
+                    onClose={() => setAdminSettingsOpen(false)}
                 />
             )}
         </div>
@@ -349,13 +349,7 @@ function PortalSettingsEditor({ settings, settingsError, onSave }) {
     }
 
     return (
-        <section className="records-card portal-settings-card">
-            <div className="records-card__heading">
-                <div>
-                    <h2>Portal settings</h2>
-                    <p>Manage form options and the colors used for each account role.</p>
-                </div>
-            </div>
+        <>
             {settingsError && <p className="settings-notice" role="status">{settingsError}</p>}
             <form className="portal-settings-form" onSubmit={handleSubmit}>
                 {[
@@ -417,6 +411,55 @@ function PortalSettingsEditor({ settings, settingsError, onSave }) {
                     {settingsSaving ? 'Saving settings…' : 'Save portal settings'}
                 </button>
             </form>
-        </section>
+        </>
+    )
+}
+
+function AdminSettingsDialog({ settings, settingsError, onSave, onClose }) {
+    useEffect(() => {
+        const closeOnEscape = (event) => {
+            if (event.key === 'Escape') onClose()
+        }
+
+        window.addEventListener('keydown', closeOnEscape)
+        return () => window.removeEventListener('keydown', closeOnEscape)
+    }, [onClose])
+
+    return (
+        <div
+            className="dialog-backdrop admin-settings-backdrop"
+            role="presentation"
+            onMouseDown={(event) => {
+                if (event.target === event.currentTarget) onClose()
+            }}
+        >
+            <section
+                className="edit-record-dialog admin-settings-dialog"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="admin-settings-title"
+            >
+                <header className="edit-record-dialog__heading">
+                    <div>
+                        <h2 id="admin-settings-title">Admin settings</h2>
+                        <p>Update form options and customize role colors.</p>
+                    </div>
+                    <button
+                        type="button"
+                        className="dialog-close"
+                        onClick={onClose}
+                        aria-label="Close admin settings"
+                    >
+                        ×
+                    </button>
+                </header>
+                <PortalSettingsEditor
+                    key={JSON.stringify(settings)}
+                    settings={settings}
+                    settingsError={settingsError}
+                    onSave={onSave}
+                />
+            </section>
+        </div>
     )
 }

@@ -4,6 +4,7 @@ import '../style/form.scss'
 import '../../shared/style/button.scss'
 import { useAuth } from '../hooks/useAuth'
 import { useNotification } from '../../shared/components/notification.context'
+import PortalHeader from '../../shared/components/PortalHeader'
 
 function Register() {
     const { loading, handleRegister } = useAuth()
@@ -23,7 +24,7 @@ function Register() {
         try {
             const response = await handleRegister(username, password)
             notify(response?.message || 'Your account has been created.', 'success')
-            navigate('/')
+            navigate('/', { replace: true })
         } catch (error) {
             notify(
                 error?.response?.data?.message || 'Unable to create your account. Please try again.',
@@ -33,45 +34,48 @@ function Register() {
     }
 
     if (loading) {
-        return <main><h1>Loading</h1></main>
+        return <div className="auth-page"><PortalHeader /><main className="main auth-main"><h1>Creating your account…</h1></main></div>
     }
 
     return (
-        <main className='main'>
-            <h1>Register</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="input-wrap">
-                    <label htmlFor="username">Username</label>
-                    <input
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        type="text"
-                        id='username'
-                        name='username'
-                        autoComplete='username'
-                        required
-                        placeholder='Enter username'
-                    />
-                </div>
-                <div className="input-wrap">
-                    <label htmlFor="password">Password</label>
-                    <input
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        type="password"
-                        id='password'
-                        name='password'
-                        autoComplete='new-password'
-                        required
-                        placeholder='Enter password'
-                    />
-                </div>
-                <div className="buttons">
-                    <button type="submit" className='button primary-button' disabled={loading}>Create account</button>
-                    <p>You already have an account <Link to={'/login'} className='primary-text'>login</Link></p>
-                </div>
-            </form>
-        </main>
+        <div className="auth-page">
+            <PortalHeader />
+            <main className='main auth-main'>
+                <h1>Register</h1>
+                <form onSubmit={handleSubmit}>
+                    <div className="input-wrap">
+                        <label htmlFor="username">Username</label>
+                        <input
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            type="text"
+                            id='username'
+                            name='username'
+                            autoComplete='username'
+                            required
+                            placeholder='Enter username'
+                        />
+                    </div>
+                    <div className="input-wrap">
+                        <label htmlFor="password">Password</label>
+                        <input
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            type="password"
+                            id='password'
+                            name='password'
+                            autoComplete='new-password'
+                            required
+                            placeholder='Enter password'
+                        />
+                    </div>
+                    <div className="buttons">
+                        <button type="submit" className='button primary-button' disabled={loading}>Create account</button>
+                        <p>You already have an account <Link to={'/login'} className='primary-text'>login</Link></p>
+                    </div>
+                </form>
+            </main>
+        </div>
     )
 }
 

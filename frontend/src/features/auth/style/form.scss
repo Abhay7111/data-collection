@@ -11,6 +11,64 @@
         font-size: 2.5rem;
     }
 
+    .auth-page {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: #f3f6fa;
+        color: #183656;
+
+        .auth-main {
+            flex: 1;
+            min-height: calc(100vh - 72px);
+            color: #183656;
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            form {
+                padding: 28px;
+                border: 1px solid #dfe6ee;
+                border-radius: 14px;
+                background: #fff;
+                box-shadow: 0 10px 30px #18365612;
+
+                .input-wrap label {
+                    color: #344c65;
+                    font-weight: 600;
+                }
+
+                .input-wrap input {
+                    border-color: #d2dce8;
+                    background: #fbfcfe;
+                    color: #183656;
+
+                    &:focus {
+                        border-color: #4087c1;
+                        box-shadow: 0 0 0 3px #4087c124;
+                    }
+                }
+
+                .buttons p {
+                    color: #526a81;
+                    text-align: center;
+                }
+            }
+        }
+
+        @media (max-width: 480px) {
+            .auth-main {
+                min-height: calc(100vh - 66px);
+                padding: 28px 16px;
+
+                form {
+                    padding: 22px 18px;
+                }
+            }
+        }
+    }
+
     form{
         margin-top: 20px;
         width: min(450px, 100%);

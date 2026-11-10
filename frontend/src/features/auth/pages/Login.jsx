@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router'
 import '../../shared/style/button.scss'
 import { useAuth } from '../hooks/useAuth'
 import { useNotification } from '../../shared/components/notification.context'
+import PortalHeader from '../../shared/components/PortalHeader'
 
 function Login() {
     const { loading, handleLogin } = useAuth()
@@ -23,7 +24,7 @@ function Login() {
         try {
             const response = await handleLogin(username, password)
             notify(response?.message || 'You are now logged in.', 'success')
-            navigate('/')
+            navigate('/', { replace: true })
         } catch (error) {
             notify(
                 error?.response?.data?.message || 'Unable to log in. Please check your details and try again.',
@@ -33,45 +34,48 @@ function Login() {
     }
 
     if (loading) {
-        return <main><h1>Loading</h1></main>
+        return <div className="auth-page"><PortalHeader /><main className="main auth-main"><h1>Signing you in…</h1></main></div>
     }
 
     return (
-        <main className='main'>
-            <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="input-wrap">
-                    <label htmlFor="username">Username</label>
-                    <input
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        type="text"
-                        id='username'
-                        name='username'
-                        autoComplete='username'
-                        required
-                        placeholder='Enter username'
-                    />
-                </div>
-                <div className="input-wrap">
-                    <label htmlFor="password">Password</label>
-                    <input
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        type="password"
-                        id='password'
-                        name='password'
-                        autoComplete='current-password'
-                        required
-                        placeholder='Enter password'
-                    />
-                </div>
-                <div className="buttons">
-                    <button type="submit" className='button primary-button' disabled={loading}>Login</button>
-                    <p>Don't have an account? <Link to={'/register'} className='primary-text'>Create One.</Link></p>
-                </div>
-            </form>
-        </main>
+        <div className="auth-page">
+            <PortalHeader />
+            <main className='main auth-main'>
+                <h1>Login</h1>
+                <form onSubmit={handleSubmit}>
+                    <div className="input-wrap">
+                        <label htmlFor="username">Username</label>
+                        <input
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            type="text"
+                            id='username'
+                            name='username'
+                            autoComplete='username'
+                            required
+                            placeholder='Enter username'
+                        />
+                    </div>
+                    <div className="input-wrap">
+                        <label htmlFor="password">Password</label>
+                        <input
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            type="password"
+                            id='password'
+                            name='password'
+                            autoComplete='current-password'
+                            required
+                            placeholder='Enter password'
+                        />
+                    </div>
+                    <div className="buttons">
+                        <button type="submit" className='button primary-button' disabled={loading}>Login</button>
+                        <p>Don't have an account? <Link to={'/register'} className='primary-text'>Create One.</Link></p>
+                    </div>
+                </form>
+            </main>
+        </div>
     )
 }
 

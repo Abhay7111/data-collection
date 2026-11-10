@@ -452,6 +452,20 @@
         }
     }
 
+    .admin-settings-dialog {
+        width: min(680px, 100%);
+        max-height: min(90vh, 820px);
+    }
+
+    .admin-settings-dialog .portal-settings-form {
+        max-height: calc(90vh - 82px);
+        overflow-y: auto;
+    }
+
+    .admin-settings-backdrop {
+        z-index: 40;
+    }
+
     .edit-record-dialog__heading {
         display: flex;
         justify-content: space-between;
