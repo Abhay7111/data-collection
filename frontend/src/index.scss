@@ -1,0 +1,25 @@
+@mixin bg-color($bgcolor: #000){
+    background-color: $bgcolor;
+}
+@mixin color($color: #fff){
+    color: $color;
+}
+
+*{
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+    font-family: poppins;
+}
+
+html,body,#root{
+    width: 100vw;
+    min-height: 100vh;
+    @include bg-color(#111);
+    @include color(#fff);
+    font-size: 16px;
+
+}
+::-webkit-scrollbar{
+    display: none;
+} 

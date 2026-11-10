@@ -1,10 +1,11 @@
 const jwt = require('jsonwebtoken')
+const userModel = require('../models/user.model')
 
 async function userIdentify(req, res, next) {
     const token = req.cookies.token
 
     if(!token) {
-        return res.status(404).json({
+        return res.status(401).json({
             message: "Token not provided, Unauthorized access"
         })
     }
@@ -19,9 +20,28 @@ async function userIdentify(req, res, next) {
         })
     }
 
-    req.user = decoded
+    const user = await userModel.findById(decoded.id).select('username role')
+    if (!user) {
+        return res.status(401).json({
+            message: "user not authorized"
+        })
+    }
+
+    req.user = {
+        id: user._id.toString(),
+        username: user.username,
+        role: user.role
+    }
+    req.deviceId = getDeviceId(req)
 
     next()
+}
+
+function getDeviceId(req) {
+    const deviceId = req.get('x-device-id')
+    return typeof deviceId === 'string' && /^[\da-f-]{36}$/i.test(deviceId)
+        ? deviceId
+        : 'unknown-device'
 }
 
 module.exports = userIdentify

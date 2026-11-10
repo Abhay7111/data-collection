@@ -19,7 +19,15 @@ const userSchema = new mongoose.Schema({
     profile_image: {
         type: String,
         default: "https://img.magnific.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3407.jpg"
-    }
+    },
+    lastSeenAt: {
+        type: Date,
+        default: null
+    },
+    deviceSessions: [{
+        deviceId: { type: String, required: true },
+        lastSeenAt: { type: Date, default: null }
+    }]
 })
 
 const userModel = mongoose.model("user", userSchema)
