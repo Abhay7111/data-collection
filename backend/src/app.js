@@ -10,9 +10,12 @@ const dataRouter = require('./routes/data.route')
 const authRouter = require('./routes/auth.routes')
 const settingsRouter = require('./routes/settings.routes')
 
-const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
-    .split(',')
-    .map((origin) => origin.trim())
+const allowedOrigins = [
+    'https://ifms-portal.netlify.app',
+    ...(process.env.CLIENT_URL || 'http://localhost:5173')
+        .split(',')
+        .map((origin) => origin.trim()),
+]
 
 app.use(cors({
     origin(origin, callback) {
